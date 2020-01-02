@@ -7,7 +7,7 @@ interface Props {
     children: ReactNode;
     looks?: string;
     isDisabled?: boolean;
-    styles?: any;
+    customStyles?: any;
 }
 
 const Button: React.FC<Props> = ({
@@ -15,11 +15,11 @@ const Button: React.FC<Props> = ({
     looks = '',
     children,
     isDisabled,
-    styles,
+    customStyles,
 }) => {
     const [classNames] = useStyles({ looks, styles });
     return (
-        <button onClick={handleClick} disabled={isDisabled} className={`${styles} ${classNames}`} style={styles}>
+        <button onClick={handleClick} disabled={isDisabled} className={classNames} style={customStyles}>
             {children}
         </button>
     );
@@ -28,7 +28,7 @@ const Button: React.FC<Props> = ({
 Button.defaultProps = {
     isDisabled: false,
     looks: '',
-    styles: {},
+    customStyles: {},
 };
 
 export default Button;

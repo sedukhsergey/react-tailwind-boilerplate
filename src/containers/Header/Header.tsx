@@ -24,10 +24,10 @@ const Header = () => {
             <Button
                 handleClick={() => setIsOpen(state => !state)}
                 looks={`${isOpen ? 'small' : 'large'}`}
-                styles={{
-                    background: 'grey',
-                    padding: '20px',
-                }}
+                // customStyles={{
+                //     background: 'grey',
+                //     padding: '20px',
+                // }}
             >
                 Open chat
             </Button>
