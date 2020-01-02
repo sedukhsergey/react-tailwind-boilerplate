@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import blueLogo from '../../images/react.svg';
 import redLogo from '../../images/redLogo.svg';
-
+import { Button } from '../../components';
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     return (
@@ -12,7 +12,7 @@ const Header = () => {
         "
         >
             <div className="md:flex">
-                <h2>Header company name</h2>
+                <h2>Header</h2>
                 <img
                     src={isOpen ? blueLogo : redLogo}
                     alt="logo"
@@ -21,9 +21,16 @@ const Header = () => {
                 w-4 rounded-lg"
                 />
             </div>
-            <button onClick={() => setIsOpen(state => !state)}>
-                {isOpen ? 'logout' : 'login'}
-            </button>
+            <Button
+                handleClick={() => setIsOpen(state => !state)}
+                looks={`${isOpen ? 'small' : 'large'}`}
+                styles={{
+                    background: 'grey',
+                    padding: '20px',
+                }}
+            >
+                Open chat
+            </Button>
         </div>
     );
 };
