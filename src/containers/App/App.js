@@ -1,4 +1,4 @@
-import React, { use } from 'react';
+import React from 'react';
 import { Header, Main, Footer } from '../../containers';
 
 function App() {
