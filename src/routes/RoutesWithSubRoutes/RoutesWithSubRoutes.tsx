@@ -59,6 +59,7 @@ const RouteWithSubRoutes = ({
         <Route
             path={path}
             render={props => {
+        console.log('RoutesWithSubRoutes props',props)
                 return (
                     <Layout
                         routes={routes}

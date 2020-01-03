@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
-import { RouterConfig, RoutesWithSubRoutes } from '../../routes';
+import { RouterConfig, RoutesWithSubRoutes } from './routes';
 
 const App = () => {
     const { routes, noRouteFound } = RouterConfig();

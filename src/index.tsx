@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route } from 'react-router-dom';
-import App from './containers/App/App';
+import App from './app';
 import * as serviceWorker from './serviceWorker';
 import './styles/tailwind.css';
 ReactDOM.render(

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-const Main = (props: any) => {
+const Login = (props: any) => {
     return (
         <div className="bg-white shadow-lg mx-4 mb-4 p-4">
-
+            Login
         </div>
     );
 };
 
-export default Main;
+export default Login;

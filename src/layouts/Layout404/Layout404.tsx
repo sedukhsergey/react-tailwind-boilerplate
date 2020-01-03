@@ -1,5 +1,4 @@
 import React from 'react';
-import { Footer, Header } from "../../modules";
 
 type Match = {
     params: any;
