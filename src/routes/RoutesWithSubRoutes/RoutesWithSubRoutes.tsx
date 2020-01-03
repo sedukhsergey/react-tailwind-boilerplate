@@ -1,17 +1,19 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-// import {
-//     PublicRouteContainer,
-//     PrivateRouteContainer,
-//     WithRoleContainer
-// } from '../../containers';
+import {
+    PrivateRoute,
+    WithRole
+    //     PublicRouteContainer,
+} from '../../routes';
+
+
 type RouteElement = {
     path: string;
     exact?: boolean;
     component: React.ReactElement;
     children: React.ReactElement;
     status: string;
-    allowedRoles?: string[]
+    allowedRoles?: string[];
 };
 type Props = {
     status: string;
@@ -20,30 +22,31 @@ type Props = {
     allowedRoles?: string[];
     children?: React.ReactNode | string;
     path: string;
-}
+};
 const RouteWithSubRoutes = ({
     status,
     component: Layout,
-    allowedRoles,
+    allowedRoles = [],
     routes,
     children,
     path,
     ...rest
-} : Props) => {
-    // if (status === 'private') {
-    //     return (
-    //         <PrivateRouteContainer
-    //             component={
-    //                 allowedRoles
-    //                     ? WithRoleContainer([...allowedRoles])(Layout)
-    //                     : Layout
-    //             }
-    //             children={children}
-    //             routes={routes}
-    //             {...rest}
-    //         />
-    //     );
-    // }
+}: Props) => {
+    if (status === 'private') {
+        return (
+            <PrivateRoute
+                path={path}
+                component={
+                    allowedRoles.length
+                        ? WithRole({ allowedRoles, wrapper: Layout })
+                        : Layout
+                }
+                children={children}
+                routes={routes}
+                {...rest}
+            />
+        );
+    }
     //
     // if (status === 'public') {
     //     return (
@@ -59,14 +62,9 @@ const RouteWithSubRoutes = ({
         <Route
             path={path}
             render={props => {
-        console.log('RoutesWithSubRoutes props',props)
                 return (
-                    <Layout
-                        routes={routes}
-                        children={children}
-                        {...props}
-                    />
-                )
+                    <Layout routes={routes} children={children} {...props} />
+                );
             }}
         />
     );

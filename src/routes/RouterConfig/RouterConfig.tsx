@@ -6,7 +6,6 @@ import { useMatch } from '../../hooks';
 import { Navigator } from '../../routes';
 const RouterConfig = () => {
     const match = useMatch();
-    console.log('match', match);
     return {
         routes: [
             {
@@ -19,7 +18,8 @@ const RouterConfig = () => {
                 path: `${match.path}/main`,
                 component: DashboardLayout,
                 children: <Main />,
-                status: 'default'
+                allowedRoles: ['member'],
+                status: 'private'
             },
             {
                 path: `${match.path}/404`,

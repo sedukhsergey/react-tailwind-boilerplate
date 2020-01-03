@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const Login = (props: any) => {
+const Login = () => {
     return (
         <div className="bg-white shadow-lg mx-4 mb-4 p-4">
             Login
