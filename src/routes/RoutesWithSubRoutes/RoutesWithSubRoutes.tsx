@@ -2,8 +2,8 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import {
     PrivateRoute,
+    PublicRoute,
     WithRole
-    //     PublicRouteContainer,
 } from '../../routes';
 
 
@@ -47,17 +47,18 @@ const RouteWithSubRoutes = ({
             />
         );
     }
-    //
-    // if (status === 'public') {
-    //     return (
-    //         <PublicRouteContainer
-    //             component={Layout}
-    //             routes={routes}
-    //             children={children}
-    //             {...rest}
-    //         />
-    //     );
-    // }
+
+    if (status === 'public') {
+        return (
+            <PublicRoute
+                component={Layout}
+                routes={routes}
+                children={children}
+                path={path}
+                {...rest}
+            />
+        );
+    }
     return (
         <Route
             path={path}

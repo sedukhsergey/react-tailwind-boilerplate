@@ -12,7 +12,7 @@ const RouterConfig = () => {
                 path: `${match.path}/login`,
                 component: PublicLayout,
                 children: <Login />,
-                status: 'default'
+                status: 'public'
             },
             {
                 path: `${match.path}/main`,
