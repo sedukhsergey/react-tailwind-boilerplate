@@ -1,18 +1,19 @@
 import React from 'react';
-import { Header, Main, Footer } from '..';
+import { Switch } from 'react-router-dom';
+import { RouterConfig, RoutesWithSubRoutes } from '../../routes';
 
-function App() {
+const App = () => {
+    const { routes, noRouteFound } = RouterConfig();
     return (
-        <div className="flex flex-col justify-between h-screen bg-gray-100">
-            <div>
-                <Header />
-                <Main />
-            </div>
-            <div className="flex items-center justify-center bg-blue-200 p-3">
-                <Footer />
-            </div>
+        <div id="body">
+            <Switch>
+                {routes.map(route => (
+                    <RoutesWithSubRoutes key={route.path} {...route} />
+                ))}
+                {noRouteFound}
+            </Switch>
         </div>
     );
-}
+};
 
 export default App;
