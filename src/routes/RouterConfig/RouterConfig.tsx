@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom';
 import { DashboardLayout, Layout404, PublicLayout } from '../../layouts';
 import { Main, Page404, Login } from '../../screens';
 import { useMatch } from '../../hooks';
-import { browserLocale } from '../../utils';
 import { Navigator, RoutesList } from '../../routes';
 const RouterConfig = () => {
     const match = useMatch();

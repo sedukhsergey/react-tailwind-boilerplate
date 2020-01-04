@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router';
-import { localStorage, browserLocale } from '../../utils';
+import { localStorage } from '../../utils';
 import { RoutesList } from '../../routes';
 
 const Navigator = () => {

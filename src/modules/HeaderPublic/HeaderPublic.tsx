@@ -1,8 +1,6 @@
 import React from 'react';
-import { RedirectRouter } from '../../routes';
 import blueLogo from '../../images/react.svg';
 import redLogo from '../../images/redLogo.svg';
-import { Button } from '../../components';
 const HeaderPublic = () => {
     return (
         <div
@@ -21,18 +19,6 @@ const HeaderPublic = () => {
                 w-4 rounded-lg"
                 />
             </div>
-            <Button
-                handleClick={() => {
-                    RedirectRouter.goToPage404();
-                }}
-                looks={`${true ? 'small' : 'large'}`}
-                // customStyles={{
-                //     background: 'grey',
-                //     padding: '20px',
-                // }}
-            >
-                Open chat
-            </Button>
         </div>
     );
 };
