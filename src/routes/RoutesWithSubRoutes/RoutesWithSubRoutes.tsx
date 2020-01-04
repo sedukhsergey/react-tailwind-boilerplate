@@ -67,6 +67,7 @@ const RouteWithSubRoutes = ({
                     <Layout routes={routes} children={children} {...props} />
                 );
             }}
+            {...rest}
         />
     );
 };

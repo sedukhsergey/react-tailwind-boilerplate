@@ -1,4 +1,5 @@
 import React from 'react';
+import { RedirectRouter } from '../../routes';
 import blueLogo from '../../images/react.svg';
 import redLogo from '../../images/redLogo.svg';
 import { Button } from '../../components';
@@ -21,7 +22,9 @@ const HeaderPublic = () => {
                 />
             </div>
             <Button
-                handleClick={() => {}}
+                handleClick={() => {
+                    RedirectRouter.goToPage404();
+                }}
                 looks={`${true ? 'small' : 'large'}`}
                 // customStyles={{
                 //     background: 'grey',

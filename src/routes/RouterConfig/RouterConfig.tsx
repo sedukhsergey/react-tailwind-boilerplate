@@ -3,26 +3,29 @@ import { Redirect } from 'react-router-dom';
 import { DashboardLayout, Layout404, PublicLayout } from '../../layouts';
 import { Main, Page404, Login } from '../../screens';
 import { useMatch } from '../../hooks';
-import { Navigator } from '../../routes';
+import { browserLocale } from '../../utils';
+import { Navigator, RoutesList } from '../../routes';
 const RouterConfig = () => {
     const match = useMatch();
     return {
         routes: [
             {
-                path: `${match.path}/login`,
+                path: `${match.path}${RoutesList.login}`,
+                exact: true,
                 component: PublicLayout,
                 children: <Login />,
-                status: 'public'
+                status: 'public',
             },
             {
-                path: `${match.path}/main`,
+                path: `${match.path}${RoutesList.main}`,
+                exact: true,
                 component: DashboardLayout,
                 children: <Main />,
                 allowedRoles: ['member'],
-                status: 'private'
+                status: 'private',
             },
             {
-                path: `${match.path}/404`,
+                path: `${match.path}${RoutesList.page404}`,
                 exact: true,
                 component: Layout404,
                 children: <Page404 />,
@@ -35,7 +38,7 @@ const RouterConfig = () => {
                 status: 'default'
             }
         ],
-        noRouteFound: <Redirect from={'*'} to={`${match.path}/404`} />
+        noRouteFound: <Redirect from={'*'} to={`${match.path}${RoutesList.page404}`} />
     };
 };
 
