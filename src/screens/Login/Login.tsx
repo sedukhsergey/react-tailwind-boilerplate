@@ -1,10 +1,10 @@
 import React from 'react';
-import { Card } from '../../components';
+import { Card, Text } from '../../components';
 
 const Login = () => {
     return (
         <Card>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aliquam aperiam at aut consectetur, debitis earum eius eveniet fugiat hic ipsa ipsum laboriosam laudantium maxime perspiciatis porro reiciendis suscipit vero.
+            <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam earum facere maiores nam quibusdam? Ab corporis ea eveniet harum illum molestiae provident veritatis vero. Aperiam, deserunt, impedit. Amet corporis, esse?</Text>
         </Card>
     );
 };
