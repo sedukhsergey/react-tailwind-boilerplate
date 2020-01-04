@@ -1,13 +1,12 @@
 import React, { ReactNode } from 'react';
 import styles from './Button.styles';
 import { useStyles } from '../../hooks';
+import { Styles } from '../../constants';
 
-interface Props {
-    handleClick: () => void;
+interface Props extends Styles {
     children: ReactNode;
-    looks?: string;
+    handleClick: () => void;
     isDisabled?: boolean;
-    customStyles?: any;
 }
 
 const Button: React.FC<Props> = ({
@@ -15,11 +14,16 @@ const Button: React.FC<Props> = ({
     looks = '',
     children,
     isDisabled,
-    customStyles,
+    customStyles
 }) => {
     const [classNames] = useStyles({ looks, styles });
     return (
-        <button onClick={handleClick} disabled={isDisabled} className={classNames} style={customStyles}>
+        <button
+            onClick={handleClick}
+            disabled={isDisabled}
+            className={classNames}
+            style={customStyles}
+        >
             {children}
         </button>
     );
@@ -28,7 +32,7 @@ const Button: React.FC<Props> = ({
 Button.defaultProps = {
     isDisabled: false,
     looks: '',
-    customStyles: {},
+    customStyles: {}
 };
 
 export default Button;
