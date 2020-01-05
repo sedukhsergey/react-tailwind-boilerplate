@@ -1,37 +1,68 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import io from 'socket.io-client';
 import { Button, Input, List } from '../../components';
 import { ChatMessage } from '../../modules';
-import { isOdd } from '../../utils';
 import BlueIcon from '../../images/react.svg';
+import { User, Message } from './types';
 
+const socket = io.connect('http://localhost:8080');
 const Chat = () => {
-    const [messagesList, setMessagesList] = useState<string[]>([]);
+    const [usersOnlineList, setUsersOnlineList] = useState<User[]>([]);
+    const [messagesList, setMessagesList] = useState<Message[]>([]);
     const [message, setMessage] = useState('');
-    const renderCurrentIcon = useCallback((num: number) => {
-        return !isOdd(num) ? BlueIcon : '';
-    }, []);
-    const isUser = useCallback((num: number) => {
-        return Boolean(isOdd(num));
-    }, []);
+
+    const renderCurrentIcon = useCallback((num: string) => {
+        if (usersOnlineList.length) {
+            return num !== usersOnlineList[0].id ? BlueIcon : '';
+        } return ''
+    }, [usersOnlineList]);
+
+    const isUser = useCallback((num: string) => {
+        if (usersOnlineList.length) {
+            return usersOnlineList[0].id === num
+        } return false;
+    }, [usersOnlineList]);
+
     const handleChangeMessage = useCallback(e => {
         setMessage(e.target.value);
     }, []);
+
     const handleBtnSubmit = useCallback(() => {
-        setMessagesList((state: string[]) => [...state, message]);
-        setMessage('');
+        socket.emit('chat_message', message);
     }, [message]);
+
+    useEffect(() => {
+        socket.on('is_disconnect', (id: string) => {
+            setUsersOnlineList(state => state.filter((i: User) => i.id !== id))
+        })
+    }, []);
+
+    useEffect(() => {
+        socket.on('is_online', (user: User) => {
+            if (user) {
+                setUsersOnlineList((state: User[]) => [...state, user]);
+            }
+        });
+    }, []);
+
+    useEffect(() => {
+        socket.on('chat_message', (msg: Message) => {
+            setMessagesList((state) => [...state, msg]);
+            setMessage('');
+        });
+    }, []);
     return (
         <div>
             <List looks={'center'} customStyles={{ marginBottom: '8px' }}>
-                {messagesList.map((i: string, index: number) => {
+                {messagesList.map((item: Message, index: number) => {
                     return (
                         <ChatMessage
-                            key={i}
-                            src={renderCurrentIcon(index)}
+                            key={index}
+                            src={renderCurrentIcon(item.id)}
                             alt={'user logo'}
-                            isUser={isUser(index)}
+                            isUser={isUser(item.id)}
                         >
-                            {i}
+                            {item.message}
                         </ChatMessage>
                     );
                 })}

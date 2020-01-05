@@ -1,25 +1,36 @@
 const express = require('express');
+const v1  = require('uuid/v1');
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
 app.get('/', (req, res) => {
-  res.render('index.ejs')
-  // res.send('Hello world');
+  console.log('connect for /',)
+  // res.render('index.ejs')
+  res.send('Hello world');
 })
+  const userStore = {};
 
 io.sockets.on('connection', function(socket) {
-  socket.on('username', function(username) {
-    socket.username = username;
-    io.emit('is_online', '🔵 <i>' + socket.username + ' join the chat..</i>');
-  });
+  const userId = v1();
+  userStore[userId] = {};
+  if (!userStore[userId].id) {
+    userStore[userId].name = 'username'
+    userStore[userId].id = userId;
+    io.emit('conn', userStore[userId]);
+  }
+  io.emit('is_online', { name: userStore[userId].name, id: userStore[userId].id })
+
 
   socket.on('disconnect', function(username) {
-    io.emit('is_online', '🔴 <i>' + socket.username + ' left the chat..</i>');
+    delete userStore[userId]
+    io.emit('is_disconnect', userId);
   })
 
+
   socket.on('chat_message', function(message) {
-    io.emit('chat_message', '<strong>' + socket.username + '</strong>: ' + message);
+    userStore[userId].message = message;
+    io.emit('chat_message', {id: userStore[userId].id, name: userStore[userId].name, message: userStore[userId].message});
   });
 
 });
