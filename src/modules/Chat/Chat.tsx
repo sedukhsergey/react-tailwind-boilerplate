@@ -1,8 +1,7 @@
 import React, { useState, useCallback } from 'react';
-import { Button, Input, List } from "../../components";
+import { Button, Input, List } from '../../components';
 import { ChatMessage } from '../../modules';
 import { isOdd } from '../../utils';
-import RedIcon from '../../images/redLogo.svg';
 import BlueIcon from '../../images/react.svg';
 
 const Chat = () => {
@@ -14,16 +13,13 @@ const Chat = () => {
     const isUser = useCallback((num: number) => {
         return Boolean(isOdd(num));
     }, []);
-    const handleChangeMessage = useCallback((e) => {
+    const handleChangeMessage = useCallback(e => {
         setMessage(e.target.value);
-    },[]);
+    }, []);
     const handleBtnSubmit = useCallback(() => {
-        setMessagesList((state: string[]) => [
-            ...state,
-            message
-        ])
-        setMessage('')
-    },[message])
+        setMessagesList((state: string[]) => [...state, message]);
+        setMessage('');
+    }, [message]);
     return (
         <div>
             <List looks={'center'} customStyles={{ marginBottom: '8px' }}>
@@ -40,11 +36,12 @@ const Chat = () => {
                     );
                 })}
             </List>
-            <button disabled className="bg-blue-500 active:bg-blue-700 text-white disabled:opacity-25">
-                Click me
-            </button>
             <div className={'flex flex-col md:flex-row md:justify-around'}>
-                <div className={'md:mb-0 md:w-2/4 mb-4  flex justify-center items-center'}>
+                <div
+                    className={
+                        'md:mb-0 md:w-2/4 mb-4  flex justify-center items-center'
+                    }
+                >
                     <Input
                         placeholder={'Your message...'}
                         value={message}
@@ -56,7 +53,7 @@ const Chat = () => {
                     <Button
                         handleClick={handleBtnSubmit}
                         looks={'default large orange'}
-                        isDisabled
+                        // isDisabled
                     >
                         Add message
                     </Button>

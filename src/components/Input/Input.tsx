@@ -1,4 +1,4 @@
-import React, { ReactNode, ChangeEvent } from 'react';
+import React, { ChangeEvent } from 'react';
 import styles from './Input.styles';
 import { useStyles } from '../../hooks';
 import { Styles } from '../../constants';

@@ -1,5 +1,5 @@
 import React, { ReactNode, useMemo } from 'react';
-import { Card, Text } from "../../../components";
+import { Card, Text } from '../../../components';
 interface Props {
     children: ReactNode;
     src: string;
@@ -7,25 +7,20 @@ interface Props {
     isUser: boolean;
 }
 
-const ChatMessage: React.FC<Props> = ({
-    children,
-    src,
-    alt,
-    isUser
-}) => {
+const ChatMessage: React.FC<Props> = ({ children, src, alt, isUser }) => {
     const renderCurrentJustify = useMemo(() => {
         return isUser ? 'justify-end' : 'justify-start';
-    },[isUser])
+    }, [isUser]);
     const renderIcon = useMemo(() => {
-        return !isUser ? <img className={'h-8 w-8 rounded-full mr-2'} src={src} alt={alt} /> : null
-    },[isUser])
+        return !isUser ? (
+            <img className={'h-8 w-8 rounded-full mr-2'} src={src} alt={alt} />
+        ) : null;
+    }, [isUser, src, alt]);
     return (
         <div className={`flex ${renderCurrentJustify}`}>
             {renderIcon}
             <Card looks={`${isUser ? 'roundedRightBottom' : 'roundedLeftTop'}`}>
-                <Text looks={'breakAll'}>
-                    {children}
-                </Text>
+                <Text looks={'breakAll'}>{children}</Text>
             </Card>
         </div>
     );
