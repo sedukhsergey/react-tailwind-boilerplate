@@ -16,10 +16,13 @@ const ChatMessage: React.FC<Props> = ({
     const renderCurrentJustify = useMemo(() => {
         return isUser ? 'justify-end' : 'justify-start';
     },[isUser])
+    const renderIcon = useMemo(() => {
+        return !isUser ? <img className={'h-8 w-8 rounded-full mr-2'} src={src} alt={alt} /> : null
+    },[isUser])
     return (
         <div className={`flex ${renderCurrentJustify}`}>
-            <Card looks={`${isUser ? 'roundedLeftTop' : 'roundedRightBottom'}`}>
-                <img className={'h-8 w-8 rounded-full mr-2'} src={src} alt={alt} />
+            {renderIcon}
+            <Card looks={`${isUser ? 'roundedRightBottom' : 'roundedLeftTop'}`}>
                 <Text looks={'breakAll'}>
                     {children}
                 </Text>
