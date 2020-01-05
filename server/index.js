@@ -13,12 +13,10 @@ app.get('/', (req, res) => {
 
 io.sockets.on('connection', function(socket) {
   const userId = v1();
+  socket.emit('getId', userId);
   userStore[userId] = {};
-  if (!userStore[userId].id) {
-    userStore[userId].name = 'username'
-    userStore[userId].id = userId;
-    io.emit('conn', userStore[userId]);
-  }
+  userStore[userId].name = 'username'
+  userStore[userId].id = userId;
   io.emit('is_online', { name: userStore[userId].name, id: userStore[userId].id })
 
 

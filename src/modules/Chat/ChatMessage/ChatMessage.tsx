@@ -4,22 +4,22 @@ interface Props {
     children: ReactNode;
     src: string;
     alt?: string;
-    isUser: boolean;
+    isCurrentUser: boolean;
 }
 
-const ChatMessage: React.FC<Props> = ({ children, src, alt, isUser }) => {
+const ChatMessage: React.FC<Props> = ({ children, src, alt, isCurrentUser }) => {
     const renderCurrentJustify = useMemo(() => {
-        return isUser ? 'justify-end' : 'justify-start';
-    }, [isUser]);
+        return isCurrentUser ? 'justify-end' : 'justify-start';
+    }, [isCurrentUser]);
     const renderIcon = useMemo(() => {
-        return !isUser ? (
+        return !isCurrentUser ? (
             <img className={'h-8 w-8 rounded-full mr-2'} src={src} alt={alt} />
         ) : null;
-    }, [isUser, src, alt]);
+    }, [isCurrentUser, src, alt]);
     return (
         <div className={`flex ${renderCurrentJustify}`}>
             {renderIcon}
-            <Card looks={`${isUser ? 'roundedRightBottom' : 'roundedLeftTop'}`}>
+            <Card looks={`${isCurrentUser ? 'roundedRightBottom' : 'roundedLeftTop'}`}>
                 <Text looks={'breakAll'}>{children}</Text>
             </Card>
         </div>

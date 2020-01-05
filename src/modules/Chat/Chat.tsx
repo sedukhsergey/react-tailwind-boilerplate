@@ -8,20 +8,23 @@ import { User, Message } from './types';
 const socket = io.connect('http://localhost:8080');
 const Chat = () => {
     const [usersOnlineList, setUsersOnlineList] = useState<User[]>([]);
+    const [userId, setUserId] = useState('');
     const [messagesList, setMessagesList] = useState<Message[]>([]);
     const [message, setMessage] = useState('');
 
-    const renderCurrentIcon = useCallback((num: string) => {
-        if (usersOnlineList.length) {
-            return num !== usersOnlineList[0].id ? BlueIcon : '';
-        } return ''
-    }, [usersOnlineList]);
+    const renderCurrentIcon = useCallback(
+        (id: string) => {
+            return id !== userId ? BlueIcon : '';
+        },
+        [userId]
+    );
 
-    const isUser = useCallback((num: string) => {
-        if (usersOnlineList.length) {
-            return usersOnlineList[0].id === num
-        } return false;
-    }, [usersOnlineList]);
+    const isCurrentUser = useCallback(
+        (id: string) => {
+            return userId === id;
+        },
+        [userId]
+    );
 
     const handleChangeMessage = useCallback(e => {
         setMessage(e.target.value);
@@ -30,25 +33,23 @@ const Chat = () => {
     const handleBtnSubmit = useCallback(() => {
         socket.emit('chat_message', message);
     }, [message]);
-
+    // переделать список активных пользоавтелей и выводить их. Передавать также имя и ваводить его.
     useEffect(() => {
-        socket.on('is_disconnect', (id: string) => {
-            setUsersOnlineList(state => state.filter((i: User) => i.id !== id))
-        })
-    }, []);
-
-    useEffect(() => {
-        socket.on('is_online', (user: User) => {
-            if (user) {
-                setUsersOnlineList((state: User[]) => [...state, user]);
-            }
+        socket.on('getId', (id: string) => {
+            setUserId(id);
         });
-    }, []);
 
-    useEffect(() => {
         socket.on('chat_message', (msg: Message) => {
-            setMessagesList((state) => [...state, msg]);
+            setMessagesList(state => [...state, msg]);
             setMessage('');
+        });
+
+        socket.on('is_disconnect', (id: string) => {
+            setUsersOnlineList(state => state.filter((i: User) => i.id !== id));
+        });
+
+        socket.on('is_online', (user: User) => {
+            setUsersOnlineList((state: User[]) => [...state, user]);
         });
     }, []);
     return (
@@ -60,7 +61,7 @@ const Chat = () => {
                             key={index}
                             src={renderCurrentIcon(item.id)}
                             alt={'user logo'}
-                            isUser={isUser(item.id)}
+                            isCurrentUser={isCurrentUser(item.id)}
                         >
                             {item.message}
                         </ChatMessage>
