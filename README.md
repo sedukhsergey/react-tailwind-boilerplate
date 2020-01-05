@@ -12,6 +12,8 @@ In the project directory, you can run:
 ## For build
 ### `yarn build`
 
+For server starting you need type `nodemon index.js` or `nodemon` from `server` directory
+
 ### Project structure
 - `components`: All reusable components store here (Buttons, Items, Checkboxes etc.)
 - `modules`: Modules consisting of reused components (Footer, CheckList, Table, Filter etc.)
