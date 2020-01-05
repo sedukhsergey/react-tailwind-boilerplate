@@ -20,4 +20,4 @@ Card.defaultProps = {
     customStyles: {}
 };
 
-export default Card;
+export default React.memo(Card);

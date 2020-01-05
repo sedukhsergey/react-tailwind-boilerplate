@@ -31,8 +31,8 @@ const Button: React.FC<Props> = ({
 
 Button.defaultProps = {
     isDisabled: false,
-    looks: '',
+    looks: 'default',
     customStyles: {}
 };
 
-export default Button;
+export default React.memo(Button);

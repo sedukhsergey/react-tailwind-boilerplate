@@ -1,10 +1,13 @@
 import React from 'react';
-import { Card, Text } from '../../components';
+import { Chat } from '../../modules';
+import { Card, H2, HorizontalLine } from '../../components';
 
 const Login = () => {
     return (
         <Card>
-            <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam earum facere maiores nam quibusdam? Ab corporis ea eveniet harum illum molestiae provident veritatis vero. Aperiam, deserunt, impedit. Amet corporis, esse?</Text>
+            <H2 looks={'orange center'}>Simple chat</H2>
+            <HorizontalLine looks={'default gray'} customStyles={{marginBottom: '8px'}}/>
+            <Chat />
         </Card>
     );
 };

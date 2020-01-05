@@ -16,4 +16,4 @@ Text.defaultProps = {
     customStyles: {}
 };
 
-export default Text;
+export default React.memo(Text);
