@@ -24,6 +24,7 @@ io.sockets.on('connection', function(socket) {
 
   socket.on('chat_message', function(message) {
     userStore[userId].message = message;
+    console.log('message from server',message)
     io.emit('chat_message', {id: userStore[userId].id, name: userStore[userId].name, message: userStore[userId].message});
   });
   let tymeoutId;

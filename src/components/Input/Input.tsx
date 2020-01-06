@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, KeyboardEvent } from 'react';
 import styles from './Input.styles';
 import { useStyles } from '../../hooks';
 import { Styles } from '../../constants';
@@ -7,6 +7,7 @@ interface Props extends Styles {
     placeholder: string;
     value: string;
     onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+    onKeyPress: (event: KeyboardEvent<HTMLInputElement>) => void;
     name: string;
 }
 const Input: React.FC<Props> = ({ looks = '', customStyles, ...rest }) => {

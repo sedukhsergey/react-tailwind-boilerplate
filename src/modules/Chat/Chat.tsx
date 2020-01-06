@@ -1,10 +1,13 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import io from 'socket.io-client';
-import { Button, Input, List, Text } from '../../components';
+import { Button, Input, List } from '../../components';
 import { ChatMessage } from '../../modules';
-import BlueIcon from '../../images/react.svg';
-import TypingIcon from '../../images/typing.svg';
 import { User, Message } from './types';
+import {
+    useCurrentIcon,
+    useRenderPlaceholder,
+    useRenderTypingStatus
+} from './helpers';
 
 const socket = io.connect('http://localhost:8080');
 const Chat = () => {
@@ -14,12 +17,9 @@ const Chat = () => {
     const [messagesList, setMessagesList] = useState<Message[]>([]);
     const [message, setMessage] = useState('');
 
-    const renderCurrentIcon = useCallback(
-        (id: string) => {
-            return id !== userId ? BlueIcon : '';
-        },
-        [userId]
-    );
+    const [renderPlaceholder] = useRenderPlaceholder(typingStatus);
+    const [renderTypingStatus] = useRenderTypingStatus(typingStatus);
+    const [renderCurrentIcon] = useCurrentIcon(userId);
 
     const isCurrentUser = useCallback(
         (id: string) => {
@@ -35,7 +35,11 @@ const Chat = () => {
         },
         [userId]
     );
-
+    const handleEnterPress = useCallback(e => {
+        if (e.key === 'Enter') {
+            socket.emit('chat_message', e.target.value);
+        }
+    }, []);
     const handleBtnSubmit = useCallback(() => {
         socket.emit('chat_message', message);
     }, [message]);
@@ -67,25 +71,6 @@ const Chat = () => {
             setTypingStatus('');
         });
     }, []);
-
-    const renderPlaceholder = useMemo(() => {
-        return typingStatus
-            ? `${typingStatus} is typing...`
-            : 'Your message...';
-    }, [typingStatus]);
-
-    const renderTypingStatus = useMemo(() => {
-        return typingStatus ? (
-            <div className={'flex items-center ml-2 mb-2'}>
-                <img
-                    src={TypingIcon}
-                    alt="user typing"
-                    className={'w-4 h-4 mr-4'}
-                />
-                <Text looks={'smallNote'}>{typingStatus} is typing...</Text>
-            </div>
-        ) : null;
-    }, [typingStatus]);
     return (
         <div>
             <List looks={'center'} customStyles={{ marginBottom: '8px' }}>
@@ -115,13 +100,14 @@ const Chat = () => {
                             value={message}
                             name={'message'}
                             onChange={handleChangeMessage}
+                            onKeyPress={handleEnterPress}
                         />
                     </div>
                     <div className={'flex justify-center items-center'}>
                         <Button
                             handleClick={handleBtnSubmit}
                             looks={'default large orange'}
-                            // isDisabled
+                            isDisabled={!message}
                         >
                             Add message
                         </Button>
