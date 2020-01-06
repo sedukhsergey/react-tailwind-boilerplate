@@ -20,17 +20,28 @@ io.sockets.on('connection', function(socket) {
   io.emit('is_online', { name: userStore[userId].name, id: userStore[userId].id })
 
 
-  socket.on('disconnect', function(username) {
-    delete userStore[userId]
-    io.emit('is_disconnect', userId);
-  })
 
 
   socket.on('chat_message', function(message) {
     userStore[userId].message = message;
     io.emit('chat_message', {id: userStore[userId].id, name: userStore[userId].name, message: userStore[userId].message});
   });
+  let tymeoutId;
+  socket.on('start typing', (userId) => {
+    socket.broadcast.emit('user typing', userStore[userId].name);
+    clearTimeout(tymeoutId)
+    tymeoutId = setTimeout(() => {
+      socket.broadcast.emit('stop typing', userStore[userId].name)
+    },3000)
+  })
 
+
+
+  socket.on('disconnect', function(username) {
+    delete userStore[userId]
+    io.emit('is_disconnect', userId);
+
+  })
 });
 
 const server = http.listen(8080, function() {
