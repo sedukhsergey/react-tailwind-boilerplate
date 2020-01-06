@@ -7,7 +7,7 @@ interface Props extends Styles {
     placeholder: string;
     value: string;
     onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-    onKeyPress: (event: KeyboardEvent<HTMLInputElement>) => void;
+    onKeyPress?: (event: KeyboardEvent<HTMLInputElement>) => void;
     name: string;
 }
 const Input: React.FC<Props> = ({ looks = '', customStyles, ...rest }) => {
@@ -24,7 +24,7 @@ const Input: React.FC<Props> = ({ looks = '', customStyles, ...rest }) => {
 
 Input.defaultProps = {
     looks: 'default',
-    customStyles: {}
+    customStyles: {},
 };
 
 export default React.memo(Input);

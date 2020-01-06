@@ -9,18 +9,25 @@ import {
     useRenderTypingStatus
 } from './helpers';
 
+type Props = {
+    name: string | null;
+    setName: Function;
+    setUsersOnlineList: Function;
+};
+
 const socket = io.connect('http://localhost:8080');
-const Chat = () => {
-    const [usersOnlineList, setUsersOnlineList] = useState<User[]>([]);
-    const [typingStatus, setTypingStatus] = useState('');
+const Chat: React.FC<Props> = ({ name, setName, setUsersOnlineList }) => {
+    const [userName, setUserName] = useState('');
+    const [typingUserStatus, setTypingStatus] = useState('');
     const [userId, setUserId] = useState('');
     const [messagesList, setMessagesList] = useState<Message[]>([]);
     const [message, setMessage] = useState('');
-
-    const [renderPlaceholder] = useRenderPlaceholder(typingStatus);
-    const [renderTypingStatus] = useRenderTypingStatus(typingStatus);
+    const [renderPlaceholder] = useRenderPlaceholder(typingUserStatus);
+    const [renderTypingStatus] = useRenderTypingStatus(typingUserStatus);
     const [renderCurrentIcon] = useCurrentIcon(userId);
-
+    const handleChangeName = useCallback(e => {
+        setUserName(e.target.value);
+    }, []);
     const isCurrentUser = useCallback(
         (id: string) => {
             return userId === id;
@@ -40,6 +47,12 @@ const Chat = () => {
             socket.emit('chat_message', e.target.value);
         }
     }, []);
+    const handleUserNameSubmit = useCallback(() => {
+        socket.emit('setName', userName, userId, (data: User) => {
+            setName(data.name);
+            setUserName('');
+        });
+    }, [userName, userId, setName]);
     const handleBtnSubmit = useCallback(() => {
         socket.emit('chat_message', message);
     }, [message]);
@@ -54,15 +67,6 @@ const Chat = () => {
             setTypingStatus('');
             setMessage('');
         });
-
-        socket.on('is_disconnect', (id: string) => {
-            setUsersOnlineList(state => state.filter((i: User) => i.id !== id));
-        });
-
-        socket.on('is_online', (user: User) => {
-            setUsersOnlineList((state: User[]) => [...state, user]);
-        });
-
         socket.on('user typing', (userName: string) => {
             setTypingStatus(() => userName);
         });
@@ -71,49 +75,97 @@ const Chat = () => {
             setTypingStatus('');
         });
     }, []);
+
+    useEffect(() => {
+        socket.on('is_disconnect', (id: string) => {
+            setUsersOnlineList((state: User[]) =>
+                state.filter((i: User) => i.id !== id)
+            );
+        });
+
+        socket.on('is_online', (user: User) => {
+            setUsersOnlineList((state: User[]) => [...state, user]);
+        });
+    }, [setUsersOnlineList]);
     return (
         <div>
-            <List looks={'center'} customStyles={{ marginBottom: '8px' }}>
-                {messagesList.map((item: Message, index: number) => {
-                    return (
-                        <ChatMessage
-                            key={index}
-                            src={renderCurrentIcon(item.id)}
-                            alt={'user logo'}
-                            isCurrentUser={isCurrentUser(item.id)}
-                        >
-                            {item.message}
-                        </ChatMessage>
-                    );
-                })}
-            </List>
-            <div className={'flex flex-col md:justify-around '}>
-                {renderTypingStatus}
-                <div className={'md:flex-row flex justify-between flex-col '}>
+            {!name ? (
+                <div className={'flex flex-col md:flex-row md:justify-between'}>
                     <div
                         className={
                             'md:mb-0 md:w-4/6 mb-4  flex justify-center items-center'
                         }
                     >
                         <Input
-                            placeholder={renderPlaceholder}
-                            value={message}
-                            name={'message'}
-                            onChange={handleChangeMessage}
-                            onKeyPress={handleEnterPress}
+                            placeholder={'Your name'}
+                            value={userName}
+                            name={'userName'}
+                            onChange={handleChangeName}
                         />
                     </div>
                     <div className={'flex justify-center items-center'}>
                         <Button
-                            handleClick={handleBtnSubmit}
+                            handleClick={handleUserNameSubmit}
                             looks={'default large orange'}
-                            isDisabled={!message}
+                            isDisabled={!userName}
                         >
-                            Add message
+                            Change Name
                         </Button>
                     </div>
                 </div>
-            </div>
+            ) : (
+                <>
+                    <List
+                        looks={'center'}
+                        customStyles={{ marginBottom: '8px' }}
+                    >
+                        {messagesList.map((item: Message, index: number) => {
+                            return (
+                                <ChatMessage
+                                    key={index}
+                                    name={item.name}
+                                    src={renderCurrentIcon(item.id)}
+                                    alt={'user logo'}
+                                    isCurrentUser={isCurrentUser(item.id)}
+                                >
+                                    {item.message}
+                                </ChatMessage>
+                            );
+                        })}
+                    </List>
+                    <div className={'flex flex-col md:justify-around '}>
+                        {renderTypingStatus}
+                        <div
+                            className={
+                                'md:flex-row flex justify-between flex-col '
+                            }
+                        >
+                            <div
+                                className={
+                                    'md:mb-0 md:w-4/6 mb-4  flex justify-center items-center'
+                                }
+                            >
+                                <Input
+                                    placeholder={renderPlaceholder}
+                                    value={message}
+                                    name={'message'}
+                                    onChange={handleChangeMessage}
+                                    onKeyPress={handleEnterPress}
+                                />
+                            </div>
+                            <div className={'flex justify-center items-center'}>
+                                <Button
+                                    handleClick={handleBtnSubmit}
+                                    looks={'default large orange'}
+                                    isDisabled={!message}
+                                >
+                                    Add message
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            )}
         </div>
     );
 };
