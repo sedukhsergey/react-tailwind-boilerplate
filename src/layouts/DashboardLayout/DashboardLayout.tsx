@@ -8,7 +8,6 @@ type Props = {
     children: React.ReactElement;
     match: Match
 };
-
 const DashboardLayout: React.FC<Props> = ({ children, match, ...rest}) => {
     return (
         <div className="flex flex-col justify-between h-screen bg-gray-100">

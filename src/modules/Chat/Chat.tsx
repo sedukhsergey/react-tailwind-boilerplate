@@ -14,7 +14,6 @@ type Props = {
     setName: Function;
     setUsersOnlineList: Function;
 };
-
 const socket = io.connect('http://localhost:8080');
 const Chat: React.FC<Props> = ({ name, setName, setUsersOnlineList }) => {
     const [userName, setUserName] = useState('');

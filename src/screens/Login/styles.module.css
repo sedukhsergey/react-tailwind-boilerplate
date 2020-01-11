@@ -1,0 +1,24 @@
+.form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin-top: 50px;
+}
+.mb4 {
+    margin-bottom: 16px;
+}
+
+.p4 {
+    padding: 16px;
+}
+
+.mb2 {
+    margin-bottom: 8px;
+}

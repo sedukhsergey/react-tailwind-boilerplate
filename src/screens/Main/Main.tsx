@@ -1,7 +1,11 @@
 import React from 'react';
-
+import { Card } from 'semantic-ui-react';
 const Main = () => {
-    return <div className="bg-white shadow-lg mx-4 mb-4 p-4">Main</div>;
+    return (
+      <div>
+
+      </div>
+    )
 };
 
 export default Main;

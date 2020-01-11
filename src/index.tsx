@@ -5,6 +5,7 @@ import { RedirectRouter } from "./routes";
 import App from './app';
 import * as serviceWorker from './serviceWorker';
 import './styles/tailwind.css';
+import 'semantic-ui-css/semantic.min.css'
 ReactDOM.render(
     <Router history={RedirectRouter.history}>
         <Route path="/:locale(en|ru)?" component={App} />
