@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { DashboardLayout, Layout404, PublicLayout } from '../../layouts';
-import { Main, Page404, Login } from '../../screens';
+import { Main, Page404, Login, Chat } from '../../screens';
 import { useMatch } from '../../hooks';
 import { Navigator, RoutesList } from '../../routes';
 const RouterConfig = () => {
@@ -13,6 +13,13 @@ const RouterConfig = () => {
                 exact: true,
                 component: PublicLayout,
                 children: <Login />,
+                status: 'public',
+            },
+            {
+                path: `${match.path}${RoutesList.chat}`,
+                exact: true,
+                component: PublicLayout,
+                children: <Chat />,
                 status: 'public',
             },
             {

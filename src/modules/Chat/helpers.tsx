@@ -2,6 +2,8 @@ import React, { useCallback, useMemo } from 'react';
 import BlueIcon from '../../images/react.svg';
 import TypingIcon from '../../images/typing.svg';
 import { Text } from '../../components';
+import io from 'socket.io-client';
+import { Message, User } from './types';
 
 export const useCurrentIcon = (userId: string) => {
     const renderCurrentIcon = useCallback(
@@ -35,3 +37,51 @@ export const useRenderTypingStatus = (typingStatus: string) => {
     }, [typingStatus]);
     return [renderTypingStatus];
 };
+
+export class ChatSocket {
+    private socket: any;
+    constructor(path: string) {
+        this.socket = io.connect(path);
+    }
+    public changeMessage(userId: string) {
+        this.socket.emit('start typing', userId);
+    }
+    public chatMessage(message: string) {
+        this.socket.emit('chat_message', message);
+    }
+    public handleChatMessage(cb: Function) {
+        this.socket.on('chat_message', (msg: Message) => {
+            cb(msg);
+        });
+    }
+    public submitUserName(userName: string, userId: string, cb: Function) {
+        this.socket.emit('setName', userName, userId, (data: User) => {
+            cb(data.name);
+        });
+    }
+    public getUserId(cb: Function) {
+        this.socket.on('getId', (id: string) => {
+            cb(id);
+        });
+    }
+    public handleUserTyping(cb: Function) {
+        this.socket.on('user typing', (userName: string) => {
+            cb(userName);
+        });
+    }
+    public handleStopTyping(cb: Function) {
+        this.socket.on('stop typing', () => {
+            cb();
+        });
+    }
+    public handleUserDisconnected(cb: Function) {
+        this.socket.on('is_disconnect', (id: string) => {
+            cb(id);
+        });
+    }
+    public handleCheckIsUserOnline(cb: Function) {
+        this.socket.on('is_online', (user: User) => {
+            cb(user);
+        });
+    }
+}

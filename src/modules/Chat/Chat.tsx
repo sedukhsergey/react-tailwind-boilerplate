@@ -1,12 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import io from 'socket.io-client';
 import { Button, Input, List } from '../../components';
 import { ChatMessage } from '../../modules';
 import { User, Message } from './types';
 import {
     useCurrentIcon,
     useRenderPlaceholder,
-    useRenderTypingStatus
+    useRenderTypingStatus,
+    ChatSocket
 } from './helpers';
 
 type Props = {
@@ -14,9 +14,9 @@ type Props = {
     setName: Function;
     setUsersOnlineList: Function;
 };
-
-const socket = io.connect('http://localhost:8080');
+let socket: any;
 const Chat: React.FC<Props> = ({ name, setName, setUsersOnlineList }) => {
+    socket = new ChatSocket('http://localhost:8080');
     const [userName, setUserName] = useState('');
     const [typingUserStatus, setTypingStatus] = useState('');
     const [userId, setUserId] = useState('');
@@ -38,52 +38,49 @@ const Chat: React.FC<Props> = ({ name, setName, setUsersOnlineList }) => {
     const handleChangeMessage = useCallback(
         e => {
             setMessage(e.target.value);
-            socket.emit('start typing', userId);
+            socket.changeMessage(userId);
         },
         [userId]
     );
     const handleEnterPress = useCallback(e => {
         if (e.key === 'Enter') {
-            socket.emit('chat_message', e.target.value);
+            socket.chatMessage(e.target.value);
         }
     }, []);
     const handleUserNameSubmit = useCallback(() => {
-        socket.emit('setName', userName, userId, (data: User) => {
-            setName(data.name);
+        socket.submitUserName(userName, userId, (newName: string) => {
+            setName(newName);
             setUserName('');
         });
     }, [userName, userId, setName]);
     const handleBtnSubmit = useCallback(() => {
-        socket.emit('chat_message', message);
+        socket.chatMessage(message);
     }, [message]);
-    // переделать список активных пользоавтелей и выводить их. Передавать также имя и ваводить его.
     useEffect(() => {
-        socket.on('getId', (id: string) => {
+        socket.getUserId((id: string) => {
             setUserId(id);
         });
-
-        socket.on('chat_message', (msg: Message) => {
+        socket.handleChatMessage((msg: Message) => {
             setMessagesList(state => [...state, msg]);
             setTypingStatus('');
             setMessage('');
         });
-        socket.on('user typing', (userName: string) => {
+        socket.handleUserTyping((userName: string) => {
             setTypingStatus(() => userName);
         });
 
-        socket.on('stop typing', (userName: string) => {
+        socket.handleStopTyping(() => {
             setTypingStatus('');
         });
     }, []);
 
     useEffect(() => {
-        socket.on('is_disconnect', (id: string) => {
+        socket.handleUserDisconnected((id: string) => {
             setUsersOnlineList((state: User[]) =>
                 state.filter((i: User) => i.id !== id)
             );
         });
-
-        socket.on('is_online', (user: User) => {
+        socket.handleCheckIsUserOnline((user: User) => {
             setUsersOnlineList((state: User[]) => [...state, user]);
         });
     }, [setUsersOnlineList]);
