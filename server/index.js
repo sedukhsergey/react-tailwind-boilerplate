@@ -1,14 +1,15 @@
 const express = require("express");
 const v1 = require("uuid/v1");
 const app = express();
+const cors = require('cors');
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
-
+const chat = require('./routes/chat');
 app.get("/", (req, res) => {
-  console.log("connect for /");
-  // res.render('index.ejs')
-  res.send("Hello world");
+  res.send();
 });
+
+app.use('/chat', chat);
 const userStore = {};
 
 io.sockets.on("connection", function(socket) {

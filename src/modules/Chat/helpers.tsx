@@ -41,6 +41,7 @@ export const useRenderTypingStatus = (typingStatus: string) => {
 export class ChatSocket {
     private socket: any;
     constructor(path: string) {
+        console.log('path',path)
         this.socket = io.connect(path);
     }
     public changeMessage(userId: string) {
