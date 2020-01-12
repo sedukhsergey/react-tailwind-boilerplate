@@ -17,19 +17,10 @@ type Props = {
 let socket: any;
 const Chat: React.FC<Props> = ({ name, setName, setUsersOnlineList }) => {
     useEffect(() => {
-            fetch('http://localhost:8080/chat', {
-                method: "GET",
-            })
-                .then(data => {
-                    data.json().then(res => {
-                        console.log('response',res)
-                    })
-                })
-                .catch(err => {
-                    console.log('err catch inside',err)
-                })
-    },[])
-    socket = new ChatSocket('http://localhost:8080');
+        socket = new ChatSocket('http://localhost:8080');
+        socket.connect('http://localhost:8080/chat');
+    }, []);
+    // socket = new ChatSocket('http://localhost:8080');
     const [userName, setUserName] = useState('');
     const [typingUserStatus, setTypingStatus] = useState('');
     const [userId, setUserId] = useState('');
