@@ -20,7 +20,6 @@ const Chat: React.FC<Props> = ({ name, setName, setUsersOnlineList }) => {
         socket = new ChatSocket('http://localhost:8080');
         socket.connect('http://localhost:8080/chat');
     }, []);
-    // socket = new ChatSocket('http://localhost:8080');
     const [userName, setUserName] = useState('');
     const [typingUserStatus, setTypingStatus] = useState('');
     const [userId, setUserId] = useState('');

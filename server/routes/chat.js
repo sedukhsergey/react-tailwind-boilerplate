@@ -1,5 +1,4 @@
 const express = require('express');
-
 const routes = express.Router();
 const v1 = require('uuid/v1')
 const cors = require('cors');
@@ -8,9 +7,7 @@ const userStore = {};
 routes.get('/', cors(), (req, res, next) => {
   res.send({data: 'connected success'})
   let io = req.app.get('socketio');
-  console.log('/',)
   io.sockets.on("connection", function(socket) {
-    console.log('connected',userStore)
     const userId = v1();
     socket.emit("getId", userId);
     userStore[userId] = {};
