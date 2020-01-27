@@ -18,6 +18,9 @@ class RedirectRouter {
     public goToPage404() {
         this.history.push(RoutesList.page404);
     }
+    public goToDashboard() {
+        this.history.push(RoutesList.dashboard);
+    }
     public gotToSomeRouteWithParams({
         campaignId,
         assessmentId

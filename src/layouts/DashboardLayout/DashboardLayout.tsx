@@ -15,7 +15,7 @@ const DashboardLayout: React.FC<Props> = ({ children, match, ...rest}) => {
                 <Header />
                 {React.cloneElement(children, {params: match.params})}
             </div>
-            <div className="flex items-center justify-center bg-blue-200 p-3">
+            <div className="flex items-center justify-center bg-blue-200 p-3 mt-8">
                 <Footer />
             </div>
         </div>

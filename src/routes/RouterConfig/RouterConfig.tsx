@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { DashboardLayout, Layout404, PublicLayout } from '../../layouts';
-import { Main, Page404, Login } from '../../screens';
+import { Main, Page404, Login, Dashboard } from '../../screens';
 import { useMatch } from '../../hooks';
 import { Navigator, RoutesList } from '../../routes';
 const RouterConfig = () => {
@@ -20,6 +20,14 @@ const RouterConfig = () => {
                 exact: true,
                 component: DashboardLayout,
                 children: <Main />,
+                allowedRoles: ['member'],
+                status: 'private',
+            },
+            {
+                path: `${match.path}${RoutesList.dashboard}`,
+                exact: true,
+                component: DashboardLayout,
+                children: <Dashboard />,
                 allowedRoles: ['member'],
                 status: 'private',
             },
